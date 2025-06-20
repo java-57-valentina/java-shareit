@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.dao;
 
 import org.springframework.stereotype.Repository;
+import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidateException;
 import ru.practicum.shareit.user.User;
@@ -62,7 +63,7 @@ public class UserStorageInMemory implements UserStorage {
 
     private void checkEmailUnique(String email) {
         if (emails.contains(email))
-            throw new ValidateException(
+            throw new ConflictException(
                     String.format("User with email %s already exists", email));
     }
 }
