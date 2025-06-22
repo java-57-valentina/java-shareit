@@ -25,4 +25,10 @@ public class ErrorHandler {
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleOwnerNotMatchException(final OwnerNotMatchException e) {
+        return new ErrorResponse(e.getMessage());
+    }
 }
