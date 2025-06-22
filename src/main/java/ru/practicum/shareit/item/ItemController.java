@@ -48,7 +48,9 @@ public class ItemController {
             @PathVariable @Min(1) Long itemId,
             @RequestHeader(X_SHARER_USER_ID) long ownerId,
             @Validated({Update.class}) @RequestBody ItemDto itemDto) {
-        return itemService.update(itemId, ownerId, itemDto);
+        ItemDto updated = itemService.update(itemId, ownerId, itemDto);
+        log.info("Item was updated: {}", updated);
+        return updated;
     }
 
     @GetMapping("/search")
