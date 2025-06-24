@@ -1,8 +1,6 @@
 package ru.practicum.shareit.item;
 
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dao.ItemStorage;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -13,7 +11,6 @@ import ru.practicum.shareit.user.dao.UserStorage;
 import java.util.Collection;
 import java.util.Collections;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ItemService {
@@ -34,7 +31,7 @@ public class ItemService {
                 .toList();
     }
 
-    public ItemDto getById(@Min(1) Long itemId) {
+    public ItemDto getById(Long itemId) {
         return ItemMapper.mapToItemDto(itemStorage.getById(itemId));
     }
 
@@ -57,7 +54,6 @@ public class ItemService {
         if (text.isBlank()) {
             return Collections.emptyList();
         }
-        log.debug("search ownerId:{}, text:{}", ownerId, text);
         Collection<Item> itemList = itemStorage.search(text, ownerId);
         return itemList.stream()
                 .map(ItemMapper::mapToItemDto)

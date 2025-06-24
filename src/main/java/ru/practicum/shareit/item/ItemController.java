@@ -12,6 +12,7 @@ import ru.practicum.shareit.user.validation.Update;
 import java.util.Collection;
 
 @Slf4j
+@Validated
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor

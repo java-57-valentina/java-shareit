@@ -14,6 +14,7 @@ import java.util.List;
 
 
 @Slf4j
+@Validated
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor

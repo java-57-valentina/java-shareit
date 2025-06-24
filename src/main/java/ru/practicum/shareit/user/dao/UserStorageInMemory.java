@@ -29,6 +29,8 @@ public class UserStorageInMemory implements UserStorage {
 
         if (user.getEmail() != null && !origin.getEmail().equals(user.getEmail())) {
             checkEmailUnique(user.getEmail());
+            emails.remove(origin.getEmail());
+            emails.add(user.getEmail());
             origin.setEmail(user.getEmail());
         }
 
