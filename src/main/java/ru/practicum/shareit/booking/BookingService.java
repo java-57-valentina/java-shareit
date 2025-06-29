@@ -40,7 +40,6 @@ public class BookingService {
         if (userId != ownerId && userId != bookerId)
             throw new ValidateException("Wrong userId");
 
-        log.info("findById: {}", booking);
         return BookingResponseDto.from(booking);
     }
 
@@ -57,7 +56,7 @@ public class BookingService {
     }
 
     public Collection<BookingResponseDto> findByOwner(Long ownerId, State state) {
-        log.info("find by state: {} owner:{} ", state.name(), ownerId);
+        log.info("find by state: {} and owner:{} ", state.name(), ownerId);
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException("User", ownerId));
 
@@ -67,7 +66,9 @@ public class BookingService {
     }
 
     public BookingResponseDto add(Long bookerId, BookingRequestDto bookingDto) {
-        log.info("add booking: {}", bookingDto);
+
+        if (!bookingDto.getStart().isBefore(bookingDto.getEnd()))
+            throw new ValidateException("Invalid booking dates");
 
         User user = userRepository.findById(bookerId)
                 .orElseThrow(() -> new NotFoundException("User", bookerId));
@@ -107,12 +108,4 @@ public class BookingService {
         Booking saved = bookingRepository.save(booking);
         return BookingResponseDto.from(saved);
     }
-
-    public Collection<BookingResponseDto> getAll() {
-        return bookingRepository.findAll().stream()
-                .map(BookingResponseDto::from)
-                .collect(Collectors.toList());
-    }
-
-
 }

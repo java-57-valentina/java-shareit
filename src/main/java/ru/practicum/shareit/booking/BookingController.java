@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
@@ -14,7 +13,6 @@ import java.util.Collection;
 
 import static ru.practicum.shareit.item.ItemController.X_SHARER_USER_ID;
 
-@Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor
