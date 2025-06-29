@@ -23,6 +23,7 @@ h2:
 
 logging:
   level:
+    ru.practicum.shareit: DEBUG
     org:
       springframework:
         orm:
