@@ -3,7 +3,6 @@ package ru.practicum.shareit.item;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
@@ -15,7 +14,6 @@ import ru.practicum.shareit.user.validation.Update;
 
 import java.util.Collection;
 
-@Slf4j
 @Validated
 @RestController
 @RequestMapping("/items")
@@ -28,9 +26,7 @@ public class ItemController {
     @PostMapping
     public ItemDto add(@RequestHeader(X_SHARER_USER_ID) long userId,
                        @Validated({Create.class}) @RequestBody ItemDto itemDto) {
-        ItemDto added = itemService.add(itemDto, userId);
-        log.info("Item was added: {}", added);
-        return added;
+        return itemService.add(itemDto, userId);
     }
 
     @GetMapping
@@ -55,9 +51,7 @@ public class ItemController {
             @PathVariable @Min(1) Long itemId,
             @RequestHeader(X_SHARER_USER_ID) long userId,
             @Validated({Update.class}) @RequestBody ItemDto itemDto) {
-        ItemDto updated = itemService.update(itemId, userId, itemDto);
-        log.info("Item was updated: {}", updated);
-        return updated;
+        return itemService.update(itemId, userId, itemDto);
     }
 
     @GetMapping("/search")
@@ -72,9 +66,7 @@ public class ItemController {
             @PathVariable @Min(1) Long itemId,
             @RequestHeader(X_SHARER_USER_ID) long userId,
             @Valid @RequestBody CommentRequestDto comment) {
-        CommentResponseDto commentResponseDto = itemService.addComment(userId, itemId, comment);
-        log.info("Comment was added: {}", commentResponseDto);
-        return commentResponseDto;
+        return itemService.addComment(userId, itemId, comment);
     }
 
 }
