@@ -3,9 +3,11 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
@@ -13,15 +15,17 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public UserDto add(UserDto userDto) {
         checkEmailIsFree(userDto.getEmail());
-        User user = userDto.toUser();
+        User user = UserMapper.toUser(userDto);
         User created = userRepository.save(user);
-        return UserDto.fromUser(created);
+        return UserMapper.toDto(created);
     }
 
     private void checkEmailIsFree(String email) {
@@ -31,8 +35,9 @@ public class UserServiceImpl implements UserService {
                     String.format("User with email %s already exists", email));
     }
 
+    @Transactional
     public UserDto update(Long userId, UserDto userDto) {
-        User user = userDto.toUser();
+        User user = UserMapper.toUser(userDto);
         user.setId(userId);
 
         User origin = userRepository.findById(userId)
@@ -47,9 +52,10 @@ public class UserServiceImpl implements UserService {
         }
 
         User updated = userRepository.save(origin);
-        return UserDto.fromUser(updated);
+        return UserMapper.toDto(updated);
     }
 
+    @Transactional
     public void delete(Long userId) {
         userRepository.deleteById(userId);
     }
@@ -58,12 +64,12 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User", userId));
 
-        return UserDto.fromUser(user);
+        return UserMapper.toDto(user);
     }
 
     public List<UserDto> getAll() {
         return userRepository.findAll().stream()
-                .map(UserDto::fromUser)
+                .map(UserMapper::toDto)
                 .toList();
     }
 }

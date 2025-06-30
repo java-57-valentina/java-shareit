@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 
 import java.time.LocalDateTime;
@@ -23,13 +22,4 @@ public class BookingRequestDto {
     @NotNull
     private LocalDateTime end;
     private Status status;
-
-    public Booking toBooking() {
-        Booking booking = new Booking();
-        booking.setId(id);
-        booking.setStatus(status);
-        booking.setStart(start);
-        booking.setEnd(end);
-        return booking;
-    }
 }

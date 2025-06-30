@@ -3,8 +3,10 @@ package ru.practicum.shareit.booking;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
+import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BookingService {
 
     private final BookingRepository bookingRepository;
@@ -40,7 +43,7 @@ public class BookingService {
         if (userId != ownerId && userId != bookerId)
             throw new ValidateException("Wrong userId");
 
-        return BookingResponseDto.from(booking);
+        return BookingMapper.toResponseDto(booking);
     }
 
     public Collection<BookingResponseDto> findByState(Long userId, State state) {
@@ -51,7 +54,7 @@ public class BookingService {
                 .orElseThrow(() -> new NotFoundException("User", userId));
 
         return bookingRepository.findByStateAndBooker(state.name(), userId).stream()
-                .map(BookingResponseDto::from)
+                .map(BookingMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
@@ -61,10 +64,11 @@ public class BookingService {
                 .orElseThrow(() -> new NotFoundException("User", ownerId));
 
         return bookingRepository.findByStateAndOwner(state.name(), ownerId).stream()
-                .map(BookingResponseDto::from)
+                .map(BookingMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public BookingResponseDto add(Long bookerId, BookingRequestDto bookingDto) {
 
         if (!bookingDto.getStart().isBefore(bookingDto.getEnd()))
@@ -79,16 +83,17 @@ public class BookingService {
         if (!item.getAvailable())
             throw new ValidateException("Item id:" + bookingDto.getItemId() + " is unavailable");
 
-        Booking booking = bookingDto.toBooking();
+        Booking booking = BookingMapper.toBooking(bookingDto);
         booking.setBooker(user);
         booking.setItem(item);
         booking.setStatus(Status.WAITING);
 
         log.info("try add booking {}", booking);
         Booking saved = bookingRepository.save(booking);
-        return BookingResponseDto.from(saved);
+        return BookingMapper.toResponseDto(saved);
     }
 
+    @Transactional
     public BookingResponseDto update(Long userId, Long bookingId, boolean approved) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Booking", bookingId));
@@ -106,6 +111,6 @@ public class BookingService {
 
         booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
         Booking saved = bookingRepository.save(booking);
-        return BookingResponseDto.from(saved);
+        return BookingMapper.toResponseDto(saved);
     }
 }
