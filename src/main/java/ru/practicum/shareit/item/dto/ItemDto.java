@@ -9,6 +9,7 @@ import ru.practicum.shareit.user.validation.Create;
 @Data
 @AllArgsConstructor
 public class ItemDto {
+
     private Long id;
 
     @NotBlank (groups = Create.class)
@@ -19,5 +20,6 @@ public class ItemDto {
 
     @NotNull (groups = Create.class)
     private Boolean available;
+
     private Long ownerId;
 }

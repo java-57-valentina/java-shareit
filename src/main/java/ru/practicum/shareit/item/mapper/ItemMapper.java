@@ -2,21 +2,23 @@ package ru.practicum.shareit.item.mapper;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
 
 @UtilityClass
 public class ItemMapper {
-     public static Item mapToItem(ItemDto dto) {
-        return new Item(
-                dto.getId(),
-                dto.getName(),
-                dto.getDescription(),
-                dto.getAvailable(),
-                dto.getOwnerId()
-        );
+
+    public Item toItem(ItemDto dto) {
+        return Item.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .available(dto.getAvailable())
+                .ownerId(dto.getOwnerId())
+                .build();
     }
 
-    public static ItemDto mapToItemDto(Item item) {
+    public ItemDto toDto(Item item) {
         return new ItemDto(
                 item.getId(),
                 item.getName(),
@@ -24,5 +26,15 @@ public class ItemMapper {
                 item.getAvailable(),
                 item.getOwnerId()
         );
+    }
+
+    public ItemResponseDto toResponceDto(Item item) {
+        return ItemResponseDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .ownerId(item.getOwnerId())
+                .build();
     }
 }
