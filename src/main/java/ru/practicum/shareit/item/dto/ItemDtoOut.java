@@ -8,7 +8,7 @@ import java.util.Collection;
 
 @Data
 @Builder
-public class ItemResponseDto {
+public class ItemDtoOut {
 
     private Long id;
     private String name;
