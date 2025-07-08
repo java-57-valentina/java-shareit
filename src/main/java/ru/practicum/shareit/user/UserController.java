@@ -23,6 +23,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public UserDto add(@Validated({Create.class}) @RequestBody UserDto userDto) {
         UserDto added = userService.add(userDto);
         log.info("User was added: {}", added);
