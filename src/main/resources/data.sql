@@ -3,6 +3,8 @@
 --TRUNCATE TABLE bookings RESTART IDENTITY CASCADE;
 
 DELETE FROM comments;
-DELETE FROM bookings;
-DELETE FROM items;
-DELETE FROM users;
+--DELETE FROM responses;
+--DELETE FROM requests;
+--DELETE FROM bookings;
+--DELETE FROM items;
+--DELETE FROM users;

@@ -11,16 +11,17 @@ import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidateException;
-import ru.practicum.shareit.item.dto.CommentRequestDto;
-import ru.practicum.shareit.item.dto.CommentResponseDto;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
+import ru.practicum.shareit.responce.model.ItemResponse;
+import ru.practicum.shareit.responce.repository.ItemResponseRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -39,9 +40,12 @@ public class ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemResponseRepository responseRepository;
+    private final ItemRequestRepository requestRepository;
+
 
     @Transactional
-    public ItemDto add(ItemDto itemDto, long userId) {
+    public ItemDtoOut add(ItemDto itemDto, long userId) {
 
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User", userId));
@@ -49,19 +53,33 @@ public class ItemService {
         Item item = ItemMapper.toItem(itemDto);
         item.setOwnerId(userId);
         Item added = itemRepository.save(item);
+
+        if (itemDto.getRequestId() != null) {
+            log.info("RequestId: {}", itemDto.getRequestId());
+
+            ItemRequest request = requestRepository.findById(itemDto.getRequestId())
+                    .orElseThrow(() -> new NotFoundException("Request", userId));
+
+            ItemResponse response = new ItemResponse();
+            response.setItem(item);
+            response.setRequest(request);
+            ItemResponse saved = responseRepository.save(response);
+            log.info("ItemResponse saved: {}", saved);
+        }
+
         return ItemMapper.toDto(added);
     }
 
-    public Collection<ItemDto> getAll() {
+    public Collection<ItemDtoOut> getAll() {
         return itemRepository.findAll().stream()
                 .map(ItemMapper::toDto)
                 .toList();
     }
 
-    public ItemResponseDto getById(Long itemId, Long userId) {
+    public ItemDtoExtOut getById(Long itemId, Long userId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Item", itemId));
-        ItemResponseDto itemDto = ItemMapper.toResponceDto(item);
+        ItemDtoExtOut itemDto = ItemMapper.toExtDto(item);
 
         if (item.getOwnerId().equals(userId)) {
             Booking lastBooking =
@@ -85,8 +103,9 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemDto update(Long itemId, long ownerId, ItemDto itemDto) {
+    public ItemDtoOut update(Long itemId, long ownerId, ItemDto itemDto) {
         Item item = ItemMapper.toItem(itemDto);
+        item.setOwnerId(ownerId); // ?
         item.setId(itemId);
 
         userRepository.findById(ownerId)
@@ -109,13 +128,13 @@ public class ItemService {
         return ItemMapper.toDto(updated);
     }
 
-    public Collection<ItemDto> getByOwner(long ownerId) {
+    public Collection<ItemDtoOut> getByOwner(long ownerId) {
         return itemRepository.findByOwnerId(ownerId).stream()
                 .map(ItemMapper::toDto)
                 .toList();
     }
 
-    public Collection<ItemDto> search(Long ownerId, String text) {
+    public Collection<ItemDtoOut> search(Long ownerId, String text) {
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException("User", ownerId));
         if (text.isBlank()) {
