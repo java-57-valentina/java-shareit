@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BookingRequestDto {
 
-    private Long id;
-
     @NotNull
     private Long itemId;
 

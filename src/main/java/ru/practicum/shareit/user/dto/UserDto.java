@@ -12,7 +12,7 @@ public class UserDto {
 
     private Long id;
 
-    @NotBlank(groups = Create.class)
+    @NotBlank(groups = Create.class, message = "Name can not be empty")
     private String name;
 
     @NotBlank(groups = Create.class)
