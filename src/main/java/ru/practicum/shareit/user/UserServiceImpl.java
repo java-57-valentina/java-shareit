@@ -51,6 +51,8 @@ public class UserServiceImpl implements UserService {
             origin.setEmail(user.getEmail());
         }
 
+        // Так как user получен из репозитория, а его изменения проходили в рамках транзакции, то не обязательно делать save в репозитории, изменения все равно зафиксируются
+
         User updated = userRepository.save(origin);
         return UserMapper.toDto(updated);
     }
