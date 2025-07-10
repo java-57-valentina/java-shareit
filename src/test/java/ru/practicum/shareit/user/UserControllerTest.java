@@ -37,7 +37,7 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    private final User user = new User( 1L, "username", "user@gmail.com");
+    private final User user = new User(1L, "username", "user@gmail.com");
 
 
     @BeforeEach
