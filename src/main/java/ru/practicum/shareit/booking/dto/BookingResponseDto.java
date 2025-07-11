@@ -13,11 +13,9 @@ import java.time.LocalDateTime;
 public class BookingResponseDto {
 
     private Long id;
-
     private UserDto booker;
     private ItemDtoOut item;
     private Status status;
-
     private LocalDateTime start;
     private LocalDateTime end;
 }
