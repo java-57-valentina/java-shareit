@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.validation.Create;
-import ru.practicum.shareit.user.validation.Update;
+import ru.practicum.shareit.validation.Create;
+import ru.practicum.shareit.validation.Update;
 
 import java.util.List;
 
@@ -20,29 +20,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UserClient userClient;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto add(@Validated({Create.class}) @RequestBody UserDto userDto) {
-        UserDto added = userService.add(userDto);
+        UserDto added = userClient.add(userDto);
         log.info("User was added: {}", added);
         return added;
     }
 
     @GetMapping("/{userId}")
     public UserDto getById(@PathVariable @Min(1) Long userId) {
-        return userService.getById(userId);
+        return userClient.getById(userId);
     }
 
     @GetMapping
     public List<UserDto> getAll() {
-        return userService.getAll();
+        return userClient.getAll();
     }
 
     @PatchMapping("/{userId}")
     public UserDto update(@PathVariable Long userId, @Validated({Update.class}) @RequestBody UserDto userDto) {
-        UserDto updated = userService.update(userId, userDto);
+        UserDto updated = userClient.update(userId, userDto);
         log.info("User was updated: {}", updated);
         return updated;
     }
@@ -50,6 +50,6 @@ public class UserController {
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable @Min(1) Long userId) {
-        userService.delete(userId);
+        userClient.delete(userId);
     }
 }
