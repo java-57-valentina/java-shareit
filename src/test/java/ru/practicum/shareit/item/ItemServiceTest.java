@@ -240,7 +240,7 @@ class ItemServiceTest {
         CommentRequestDto commentDto = new CommentRequestDto("Great item!");
 
         Booking booking = new Booking();
-        booking.setId( 1L);
+        booking.setId(1L);
         booking.setStart(LocalDateTime.now().minusDays(2));
         booking.setEnd(LocalDateTime.now().minusDays(1));
         booking.setItem(item);
