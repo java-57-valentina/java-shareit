@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
@@ -27,19 +28,19 @@ public class UserClient extends BaseClient {
         );
     }
 
-    public UserDto add(UserDto userDto) {
+    public ResponseEntity<Object> add(UserDto userDto) {
         return null;
     }
 
-    public UserDto getById(@Min(1) Long userId) {
+    public ResponseEntity<Object> getById(@Min(1) Long userId) {
         return null;
     }
 
-    public List<UserDto> getAll() {
+    public ResponseEntity<Object> getAll() {
         return null;
     }
 
-    public UserDto update(Long userId, UserDto userDto) {
+    public ResponseEntity<Object> update(Long userId, UserDto userDto) {
         return null;
     }
 

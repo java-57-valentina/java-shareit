@@ -4,13 +4,12 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.validation.Create;
 import ru.practicum.shareit.validation.Update;
-
-import java.util.List;
 
 
 @Slf4j
@@ -24,27 +23,23 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto add(@Validated({Create.class}) @RequestBody UserDto userDto) {
-        UserDto added = userClient.add(userDto);
-        log.info("User was added: {}", added);
-        return added;
+    public ResponseEntity<Object> add(@Validated({Create.class}) @RequestBody UserDto userDto) {
+        return userClient.add(userDto);
     }
 
     @GetMapping("/{userId}")
-    public UserDto getById(@PathVariable @Min(1) Long userId) {
+    public ResponseEntity<Object> getById(@PathVariable @Min(1) Long userId) {
         return userClient.getById(userId);
     }
 
     @GetMapping
-    public List<UserDto> getAll() {
+    public ResponseEntity<Object> getAll() {
         return userClient.getAll();
     }
 
     @PatchMapping("/{userId}")
-    public UserDto update(@PathVariable Long userId, @Validated({Update.class}) @RequestBody UserDto userDto) {
-        UserDto updated = userClient.update(userId, userDto);
-        log.info("User was updated: {}", updated);
-        return updated;
+    public ResponseEntity<Object> update(@PathVariable Long userId, @Validated({Update.class}) @RequestBody UserDto userDto) {
+        return userClient.update(userId, userDto);
     }
 
     @DeleteMapping("/{userId}")
