@@ -22,9 +22,6 @@ public class ItemResponse {
     @ToString.Exclude
     private Item item;
 
-//    @Column(name = "request_id", nullable = false)
-//    private Long requestId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
     private ItemRequest request;
