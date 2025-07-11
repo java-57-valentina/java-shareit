@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BookingMapperSimpleTest {
+class BookingMapperTest {
 
     private final LocalDateTime start = LocalDateTime.now().plusDays(1);
     private final LocalDateTime end = LocalDateTime.now().plusDays(2);
