@@ -146,7 +146,7 @@ public class ItemService {
     }
 
     @Transactional
-    public CommentResponseDto addComment(long userId, @Min(1) Long itemId, CommentRequestDto commentDto) {
+    public CommentDtoOut addComment(long userId, @Min(1) Long itemId, CommentDto commentDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User", userId));
 

@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.State;
 
 import static ru.practicum.shareit.Constants.X_SHARER_USER_ID;
@@ -43,7 +43,7 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<Object> add(
             @RequestHeader(value = X_SHARER_USER_ID) Long userId,
-            @Valid @RequestBody BookingRequestDto bookingDto) {
+            @Valid @RequestBody BookingDto bookingDto) {
         return bookingClient.add(userId, bookingDto);
     }
 

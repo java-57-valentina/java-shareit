@@ -2,9 +2,9 @@ package ru.practicum.shareit.booking.mapper;
 
 import jakarta.annotation.Nullable;
 import lombok.experimental.UtilityClass;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.booking.dto.BookingResponseDto;
-import ru.practicum.shareit.booking.dto.TinyBookingResponseDto;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingDtoOut;
+import ru.practicum.shareit.booking.dto.TinyBookingDtoOut;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.user.mapper.UserMapper;
@@ -12,7 +12,7 @@ import ru.practicum.shareit.user.mapper.UserMapper;
 @UtilityClass
 public class BookingMapper {
 
-    public Booking toBooking(BookingRequestDto dto) {
+    public Booking toBooking(BookingDto dto) {
         Booking booking = new Booking();
         booking.setStatus(dto.getStatus());
         booking.setStart(dto.getStart());
@@ -20,8 +20,8 @@ public class BookingMapper {
         return booking;
     }
 
-    public BookingResponseDto toResponseDto(Booking booking) {
-        BookingResponseDto bookingDto = new BookingResponseDto();
+    public BookingDtoOut toResponseDto(Booking booking) {
+        BookingDtoOut bookingDto = new BookingDtoOut();
         bookingDto.setId(booking.getId());
         bookingDto.setItem(ItemMapper.toDto(booking.getItem()));
         bookingDto.setBooker(UserMapper.toDto(booking.getBooker()));
@@ -31,11 +31,11 @@ public class BookingMapper {
         return bookingDto;
     }
 
-    public TinyBookingResponseDto toTinyDto(@Nullable Booking booking) {
+    public TinyBookingDtoOut toTinyDto(@Nullable Booking booking) {
         if (booking == null)
             return null;
 
-        TinyBookingResponseDto bookingDto = new TinyBookingResponseDto();
+        TinyBookingDtoOut bookingDto = new TinyBookingDtoOut();
         bookingDto.setId(booking.getId());
         bookingDto.setItemId(booking.getItem().getId());
         bookingDto.setBookerId(booking.getBooker().getId());

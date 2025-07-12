@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingDtoOut;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
@@ -59,7 +59,7 @@ class BookingServiceTest {
     void findById_ShouldReturnBooking_WhenUserIsOwner() {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
 
-        BookingResponseDto result = bookingService.findById(1L, 2L); // ownerId = 2L
+        BookingDtoOut result = bookingService.findById(1L, 2L); // ownerId = 2L
 
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(1L);
@@ -81,7 +81,7 @@ class BookingServiceTest {
         when(bookingRepository.findByStateAndBooker(anyString(), anyLong()))
                 .thenReturn(List.of(booking));
 
-        Collection<BookingResponseDto> result = bookingService.findByState(1L, State.ALL);
+        Collection<BookingDtoOut> result = bookingService.findByState(1L, State.ALL);
 
         assertThat(result).hasSize(1);
         assertThat(result.iterator().next().getId()).isEqualTo(1L);
@@ -103,7 +103,7 @@ class BookingServiceTest {
         when(bookingRepository.findByStateAndOwner(anyString(), anyLong()))
                 .thenReturn(List.of(booking));
 
-        Collection<BookingResponseDto> result = bookingService.findByOwner(2L, State.ALL); // ownerId = 2L
+        Collection<BookingDtoOut> result = bookingService.findByOwner(2L, State.ALL); // ownerId = 2L
 
         assertThat(result).hasSize(1);
         assertThat(result.iterator().next().getId()).isEqualTo(1L);
@@ -112,7 +112,7 @@ class BookingServiceTest {
     // Тесты для add
     @Test
     void add_ShouldCreateBooking() {
-        BookingRequestDto requestDto = new BookingRequestDto();
+        BookingDto requestDto = new BookingDto();
         requestDto.setItemId(1L);
         requestDto.setStart(now.plusDays(1));
         requestDto.setEnd(now.plusDays(2));
@@ -122,7 +122,7 @@ class BookingServiceTest {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
         when(bookingRepository.save(any(Booking.class))).thenReturn(booking);
 
-        BookingResponseDto result = bookingService.add(1L, requestDto);
+        BookingDtoOut result = bookingService.add(1L, requestDto);
 
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(1L);
@@ -130,7 +130,7 @@ class BookingServiceTest {
 
     @Test
     void add_ShouldThrow_WhenInvalidDates() {
-        BookingRequestDto requestDto = new BookingRequestDto();
+        BookingDto requestDto = new BookingDto();
         requestDto.setItemId(1L);
         requestDto.setStart(now.plusDays(2));
         requestDto.setEnd(now.plusDays(1));
@@ -143,7 +143,7 @@ class BookingServiceTest {
 
     @Test
     void add_ShouldThrow_WhenItemUnavailable() {
-        BookingRequestDto requestDto = new BookingRequestDto();
+        BookingDto requestDto = new BookingDto();
         requestDto.setItemId(1L);
         requestDto.setStart(now.plusDays(1));
         requestDto.setEnd(now.plusDays(2));
@@ -166,7 +166,7 @@ class BookingServiceTest {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
         when(bookingRepository.save(any(Booking.class))).thenReturn(booking);
 
-        BookingResponseDto result = bookingService.update(2L, 1L, true); // ownerId = 2L
+        BookingDtoOut result = bookingService.update(2L, 1L, true); // ownerId = 2L
 
         assertThat(result).isNotNull();
         assertThat(result.getStatus()).isEqualTo(Status.APPROVED);

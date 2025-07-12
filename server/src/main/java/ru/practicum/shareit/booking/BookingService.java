@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.dto.BookingResponseDto;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
+import ru.practicum.shareit.booking.dto.BookingDtoOut;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
@@ -32,7 +32,7 @@ public class BookingService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
-    public BookingResponseDto findById(Long id, long userId) {
+    public BookingDtoOut findById(Long id, long userId) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Booking", id));
 
@@ -46,7 +46,7 @@ public class BookingService {
         return BookingMapper.toResponseDto(booking);
     }
 
-    public Collection<BookingResponseDto> findByState(Long userId, State state) {
+    public Collection<BookingDtoOut> findByState(Long userId, State state) {
 
         log.info("find by state: {} and booker:{}", state.name(), userId);
 
@@ -58,7 +58,7 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
-    public Collection<BookingResponseDto> findByOwner(Long ownerId, State state) {
+    public Collection<BookingDtoOut> findByOwner(Long ownerId, State state) {
         log.info("find by state: {} and owner:{} ", state.name(), ownerId);
         userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException("User", ownerId));
@@ -69,7 +69,7 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingResponseDto add(Long bookerId, BookingRequestDto bookingDto) {
+    public BookingDtoOut add(Long bookerId, BookingDto bookingDto) {
 
         if (!bookingDto.getStart().isBefore(bookingDto.getEnd()))
             throw new ValidateException("Invalid booking dates");
@@ -94,7 +94,7 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingResponseDto update(Long userId, Long bookingId, boolean approved) {
+    public BookingDtoOut update(Long userId, Long bookingId, boolean approved) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Booking", bookingId));
 

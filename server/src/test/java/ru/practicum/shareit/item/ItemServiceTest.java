@@ -237,7 +237,7 @@ class ItemServiceTest {
     // ==================== addComment() ====================
     @Test
     void addComment_ShouldSaveComment() {
-        CommentRequestDto commentDto = new CommentRequestDto("Great item!");
+        CommentDto commentDto = new CommentDto("Great item!");
 
         Booking booking = new Booking();
         booking.setId(1L);
@@ -253,7 +253,7 @@ class ItemServiceTest {
                 .thenReturn(List.of(booking));
         when(commentRepository.save(any(Comment.class))).thenReturn(new Comment(1L, "Great item!", item, user, LocalDateTime.now()));
 
-        CommentResponseDto result = itemService.addComment(1L, 1L, commentDto);
+        CommentDtoOut result = itemService.addComment(1L, 1L, commentDto);
 
         assertThat(result).isNotNull();
         assertThat(result.getText()).isEqualTo("Great item!");
@@ -262,7 +262,7 @@ class ItemServiceTest {
 
     @Test
     void addComment_ShouldThrowValidateException_WhenNoBookings() {
-        CommentRequestDto commentDto = new CommentRequestDto("Great item!");
+        CommentDto commentDto = new CommentDto("Great item!");
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));

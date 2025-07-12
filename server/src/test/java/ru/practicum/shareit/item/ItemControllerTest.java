@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.booking.dto.TinyBookingResponseDto;
+import ru.practicum.shareit.booking.dto.TinyBookingDtoOut;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.mapper.ItemMapper;
@@ -108,7 +108,7 @@ class ItemControllerTest {
     void getById() {
         ItemDtoExtOut itemDtoExtOut = ItemMapper.toExtDto(item);
 
-        TinyBookingResponseDto bookingDto = new TinyBookingResponseDto();
+        TinyBookingDtoOut bookingDto = new TinyBookingDtoOut();
         bookingDto.setId(1L);
         bookingDto.setBookerId(2L);
         bookingDto.setItemId(itemDtoExtOut.getId());
@@ -179,12 +179,12 @@ class ItemControllerTest {
     @Test
     @SneakyThrows
     void addComment() {
-        CommentRequestDto commentRequest = new CommentRequestDto("Great item!");
+        CommentDto commentRequest = new CommentDto("Great item!");
         Long userId = 1L;
         Long itemId = 1L;
 
         LocalDateTime created = LocalDateTime.of(2025, 1, 1, 10, 0, 0);
-        CommentResponseDto commentDtoOut = CommentResponseDto.builder()
+        CommentDtoOut commentDtoOut = CommentDtoOut.builder()
             .id(1L)
             .text("Great item!")
             .created(created)

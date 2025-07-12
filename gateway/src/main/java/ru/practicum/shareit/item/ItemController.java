@@ -63,7 +63,7 @@ public class ItemController {
     public ResponseEntity<Object> addComment(
             @PathVariable @Min(1) Long itemId,
             @RequestHeader(X_SHARER_USER_ID) long userId,
-            @Valid @RequestBody CommentRequestDto comment) {
+            @Valid @RequestBody CommentDto comment) {
         return itemClient.addComment(userId, itemId, comment);
     }
 

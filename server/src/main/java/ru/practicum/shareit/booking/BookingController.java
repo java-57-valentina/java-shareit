@@ -5,8 +5,8 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.dto.BookingResponseDto;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
+import ru.practicum.shareit.booking.dto.BookingDtoOut;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.State;
 
 import java.util.Collection;
@@ -22,35 +22,35 @@ public class BookingController {
     private final BookingService bookingService;
 
     @GetMapping("/{bookingId}")
-    public BookingResponseDto getById(
+    public BookingDtoOut getById(
             @RequestHeader(value = X_SHARER_USER_ID) Long userId,
             @PathVariable @Min(1) Long bookingId) {
         return bookingService.findById(bookingId, userId);
     }
 
    @GetMapping
-    public Collection<BookingResponseDto> getByState(
+    public Collection<BookingDtoOut> getByState(
             @RequestHeader(value = X_SHARER_USER_ID) Long userId,
             @RequestParam(name = "state", defaultValue = "ALL") State state) {
         return bookingService.findByState(userId, state);
     }
 
     @GetMapping("/owner")
-    public Collection<BookingResponseDto> getByOwner(
+    public Collection<BookingDtoOut> getByOwner(
             @RequestHeader(X_SHARER_USER_ID) Long ownerId,
             @RequestParam(name = "state", defaultValue = "ALL") State state) {
         return bookingService.findByOwner(ownerId, state);
     }
 
     @PostMapping
-    public BookingResponseDto add(
+    public BookingDtoOut add(
             @RequestHeader(value = X_SHARER_USER_ID) Long userId,
-            @Valid @RequestBody BookingRequestDto bookingDto) {
+            @Valid @RequestBody BookingDto bookingDto) {
         return bookingService.add(userId, bookingDto);
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingResponseDto update(
+    public BookingDtoOut update(
             @RequestHeader(value = X_SHARER_USER_ID) Long userId,
             @PathVariable @Min(1) Long bookingId,
             @RequestParam(name = "approved") boolean approved) {

@@ -8,8 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingDtoOut;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
@@ -44,7 +44,7 @@ class BookingControllerTest {
     @Test
     @SneakyThrows
     void getById() {
-        BookingResponseDto bookingResponse = new BookingResponseDto();
+        BookingDtoOut bookingResponse = new BookingDtoOut();
         bookingResponse.setId(1L);
         bookingResponse.setStatus(Status.APPROVED);
         bookingResponse.setStart(LocalDateTime.of(2023, 1, 1, 12, 0));
@@ -85,7 +85,7 @@ class BookingControllerTest {
                 .name("Test Item")
                 .build();
 
-        BookingResponseDto booking1 = new BookingResponseDto();
+        BookingDtoOut booking1 = new BookingDtoOut();
         booking1.setId(1L);
         booking1.setBooker(booker);
         booking1.setItem(item);
@@ -93,7 +93,7 @@ class BookingControllerTest {
         booking1.setEnd(end);
         booking1.setStatus(Status.APPROVED);
 
-        BookingResponseDto booking2 = new BookingResponseDto();
+        BookingDtoOut booking2 = new BookingDtoOut();
         booking2.setId(2L);
         booking2.setBooker(booker);
         booking2.setItem(item);
@@ -101,7 +101,7 @@ class BookingControllerTest {
         booking2.setEnd(end.plusDays(3));
         booking2.setStatus(Status.APPROVED);
 
-        List<BookingResponseDto> bookings = List.of(booking1, booking2);
+        List<BookingDtoOut> bookings = List.of(booking1, booking2);
 
         // Настройка мока
         when(bookingService.findByState(anyLong(), any(State.class)))
@@ -136,7 +136,7 @@ class BookingControllerTest {
                 .ownerId(1L)  // Владелец предмета
                 .build();
 
-        BookingResponseDto booking1 = new BookingResponseDto();
+        BookingDtoOut booking1 = new BookingDtoOut();
         booking1.setId(1L);
         booking1.setBooker(booker);
         booking1.setItem(item);
@@ -144,7 +144,7 @@ class BookingControllerTest {
         booking1.setEnd(end);
         booking1.setStatus(Status.APPROVED);
 
-        BookingResponseDto booking2 = new BookingResponseDto();
+        BookingDtoOut booking2 = new BookingDtoOut();
         booking2.setId(2L);
         booking2.setBooker(booker);
         booking2.setItem(item);
@@ -152,7 +152,7 @@ class BookingControllerTest {
         booking2.setEnd(end.plusDays(3));
         booking2.setStatus(Status.WAITING);
 
-        List<BookingResponseDto> bookings = List.of(booking1, booking2);
+        List<BookingDtoOut> bookings = List.of(booking1, booking2);
 
         // Настройка мока
         when(bookingService.findByOwner(anyLong(), any(State.class)))
@@ -178,7 +178,7 @@ class BookingControllerTest {
         LocalDateTime start = LocalDateTime.now().plusDays(1);
         LocalDateTime end = start.plusDays(2);
 
-        BookingRequestDto bookingDto = new BookingRequestDto();
+        BookingDto bookingDto = new BookingDto();
         bookingDto.setItemId(3L);
         bookingDto.setStart(start);
         bookingDto.setEnd(end);
@@ -190,7 +190,7 @@ class BookingControllerTest {
                 .name("Item Name")
                 .build();
 
-        BookingResponseDto expectedResponse = new BookingResponseDto();
+        BookingDtoOut expectedResponse = new BookingDtoOut();
         expectedResponse.setId(1L);
         expectedResponse.setBooker(booker);
         expectedResponse.setItem(item);
@@ -199,7 +199,7 @@ class BookingControllerTest {
         expectedResponse.setStatus(Status.WAITING);
 
         // Настройка мока
-        when(bookingService.add(anyLong(), any(BookingRequestDto.class)))
+        when(bookingService.add(anyLong(), any(BookingDto.class)))
                 .thenReturn(expectedResponse);
 
         // Выполнение запроса и проверки
@@ -231,7 +231,7 @@ class BookingControllerTest {
                 .ownerId(ownerId)
                 .build();
 
-        BookingResponseDto updatedBooking = new BookingResponseDto();
+        BookingDtoOut updatedBooking = new BookingDtoOut();
         updatedBooking.setId(bookingId);
         updatedBooking.setBooker(booker);
         updatedBooking.setItem(item);

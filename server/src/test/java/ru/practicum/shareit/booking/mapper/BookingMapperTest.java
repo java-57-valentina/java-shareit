@@ -1,9 +1,9 @@
 package ru.practicum.shareit.booking.mapper;
 
 import org.junit.jupiter.api.Test;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.booking.dto.BookingResponseDto;
-import ru.practicum.shareit.booking.dto.TinyBookingResponseDto;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingDtoOut;
+import ru.practicum.shareit.booking.dto.TinyBookingDtoOut;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.item.model.Item;
@@ -20,7 +20,7 @@ class BookingMapperTest {
 
     @Test
     void toBooking_ShouldMapBasicFields() {
-        BookingRequestDto dto = new BookingRequestDto();
+        BookingDto dto = new BookingDto();
         dto.setStart(start);
         dto.setEnd(end);
         dto.setStatus(Status.WAITING);
@@ -45,7 +45,7 @@ class BookingMapperTest {
         booking.setItem(item);
         booking.setBooker(booker);
 
-        BookingResponseDto result = BookingMapper.toResponseDto(booking);
+        BookingDtoOut result = BookingMapper.toResponseDto(booking);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
@@ -70,7 +70,7 @@ class BookingMapperTest {
         booking.setItem(item);
         booking.setBooker(booker);
 
-        TinyBookingResponseDto result = BookingMapper.toTinyDto(booking);
+        TinyBookingDtoOut result = BookingMapper.toTinyDto(booking);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
