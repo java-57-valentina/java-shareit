@@ -7,16 +7,16 @@ import junit.framework.TestSuite;
 public class ShareItServerTest extends TestCase {
     public ShareItServerTest(String testName )
     {
-        super( testName );
+        super(testName);
     }
 
     public static Test suite()
     {
-        return new TestSuite( ShareItServerTest.class );
+        return new TestSuite(ShareItServerTest.class);
     }
 
     public void testApp()
     {
-        assertTrue( true );
+        assertTrue(true);
     }
 }
