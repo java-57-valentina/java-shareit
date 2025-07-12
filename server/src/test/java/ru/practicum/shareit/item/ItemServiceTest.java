@@ -249,7 +249,7 @@ class ItemServiceTest {
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
-        when(bookingRepository.findApprovedPastAndCurrentByBookerIdAndItemId(anyLong(), anyLong()))
+        when(bookingRepository.findApprovedPastByBookerIdAndItemId(anyLong(), anyLong()))
                 .thenReturn(List.of(booking));
         when(commentRepository.save(any(Comment.class))).thenReturn(new Comment(1L, "Great item!", item, user, LocalDateTime.now()));
 
@@ -266,11 +266,11 @@ class ItemServiceTest {
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
-        when(bookingRepository.findApprovedPastAndCurrentByBookerIdAndItemId(anyLong(), anyLong()))
+        when(bookingRepository.findApprovedPastByBookerIdAndItemId(anyLong(), anyLong()))
                 .thenReturn(Collections.emptyList());
 
         assertThatThrownBy(() -> itemService.addComment(1L, 1L, commentDto))
                 .isInstanceOf(ValidateException.class)
-                .hasMessageContaining("does not have current or past bookings");
+                .hasMessageContaining("does not have past bookings");
     }
 }
