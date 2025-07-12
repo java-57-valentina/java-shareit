@@ -3,7 +3,6 @@ package ru.practicum.shareit.client;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.hc.client5.http.HttpHostConnectException;
 import org.springframework.http.*;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
