@@ -29,7 +29,7 @@ public class UserClient extends BaseClient {
     }
 
     public ResponseEntity<Object> add(UserDto userDto) {
-        return null;
+        return post("", userDto);
     }
 
     public ResponseEntity<Object> getById(@Min(1) Long userId) {
