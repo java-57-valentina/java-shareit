@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.request;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,15 +8,16 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
-import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 @Service
-public class UserClient extends BaseClient {
+public class ItemRequestClient extends BaseClient {
 
-    private static final String API_PREFIX = "/users";
+    private static final String API_PREFIX = "/requests";
 
     @Autowired
-    public UserClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    public ItemRequestClient(@Value("${shareit-server.url}") String serverUrl,
+                             RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
@@ -25,23 +26,19 @@ public class UserClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> add(UserDto userDto) {
-        return post("", userDto);
-    }
-
-    public ResponseEntity<Object> getById(Long userId) {
-        return get("/" + userId);
-    }
-
     public ResponseEntity<Object> getAll() {
-        return get("");
+        return get("/all", null);
     }
 
-    public ResponseEntity<Object> update(Long userId, UserDto userDto) {
-        return patch("/" + userId, userDto);
+    public ResponseEntity<Object> getByRequester(Long requesterId) {
+        return get("", requesterId);
     }
 
-    public void delete(Long userId) {
-        delete("/" + userId);
+    public ResponseEntity<Object> getById(Long id) {
+        return get("/" + id, null);
+    }
+
+    public ResponseEntity<Object> add(Long userId, ItemRequestDto requestDto) {
+        return post("", userId, requestDto);
     }
 }

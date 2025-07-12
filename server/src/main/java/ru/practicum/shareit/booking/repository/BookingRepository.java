@@ -44,9 +44,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "b.booker.id = :bookerId " +
             "AND b.item.id = :itemId " +
             "AND b.status = 'APPROVED' " +
-            "AND b.start <= CURRENT_TIMESTAMP " +
+            "AND b.end <= CURRENT_TIMESTAMP " +
             "ORDER BY b.start DESC")
-    Collection<Booking> findApprovedPastAndCurrentByBookerIdAndItemId(
+    Collection<Booking> findApprovedPastByBookerIdAndItemId(
             @Param("bookerId") Long bookerId,
             @Param("itemId") Long itemId
     );

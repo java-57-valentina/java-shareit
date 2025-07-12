@@ -43,7 +43,6 @@ public class ItemService {
     private final ItemResponseRepository responseRepository;
     private final ItemRequestRepository requestRepository;
 
-
     @Transactional
     public ItemDtoOut add(ItemDto itemDto, long userId) {
 
@@ -154,9 +153,9 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Item", itemId));
 
-        Collection<Booking> userBookings = bookingRepository.findApprovedPastAndCurrentByBookerIdAndItemId(userId, itemId);
+        Collection<Booking> userBookings = bookingRepository.findApprovedPastByBookerIdAndItemId(userId, itemId);
         if (userBookings.isEmpty()) {
-            throw new ValidateException("User id:" + userId + " does not have current or past bookings of item id:" + itemId);
+            throw new ValidateException("User id:" + userId + " does not have past bookings of item id:" + itemId);
         }
 
         Comment comment = CommentMapper.toComment(commentDto);
