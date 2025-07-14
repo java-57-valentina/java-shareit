@@ -55,9 +55,6 @@ public class ItemRequestService {
     public ItemRequestExtDtoOut getById(Long id) {
         ItemRequest request = requestRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Item request", id));
-        ItemRequestExtDtoOut responseExtDto = RequestMapper.toResponseExtDto(request);
-        // Collection<Item> items = responseRepository.findItemsByRequestId(request.getId());
-        // responseExtDto.setItems(items.stream().map(ItemMapper::toTinyDto).toList());
-        return responseExtDto;
+        return RequestMapper.toResponseExtDto(request);
     }
 }

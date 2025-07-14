@@ -40,8 +40,6 @@ class ItemServiceTest {
     @Mock
     private CommentRepository commentRepository;
     @Mock
-    private ItemResponseRepository responseRepository;
-    @Mock
     private ItemRequestRepository requestRepository;
 
     @InjectMocks
@@ -83,7 +81,6 @@ class ItemServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getName()).isEqualTo(itemDto.getName());
         verify(itemRepository).save(any(Item.class));
-        verify(responseRepository).save(any(ItemResponse.class));
     }
 
     @Test

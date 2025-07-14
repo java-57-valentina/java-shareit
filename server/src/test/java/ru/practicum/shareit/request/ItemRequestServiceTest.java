@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoOut;
@@ -37,14 +38,14 @@ class ItemRequestServiceTest {
     private ItemRequestRepository requestRepository;
 
     @Mock
-    private ItemResponseRepository responseRepository;
+    private ItemService itemService;
 
     @InjectMocks
     private ItemRequestService requestService;
 
     private final User user = new User(1L, "user", "user@email.com");
     private final ItemRequest request = new ItemRequest(1L, "description", user, LocalDateTime.now(), List.of());
-    private final Item item = new Item(1L, "item", "description", true, 2L);
+    private final Item item = new Item(1L, "item", "description", true, 2L, null);
 
     @Test
     void add_ShouldCreateRequest() {
@@ -82,7 +83,7 @@ class ItemRequestServiceTest {
     @Test
     void getByRequester_ShouldReturnRequests() {
         // Подготовка
-        when(requestRepository.findAllByRequesterId(anyLong()))
+        when(requestRepository.findAllByRequesterIdOrderByCreatedAtDesc(anyLong()))
                 .thenReturn(List.of(request));
 
         // Выполнение
@@ -96,7 +97,7 @@ class ItemRequestServiceTest {
     @Test
     void getByRequester_ShouldReturnEmptyList_WhenNoRequests() {
         // Подготовка
-        when(requestRepository.findAllByRequesterId(anyLong()))
+        when(requestRepository.findAllByRequesterIdOrderByCreatedAtDesc(anyLong()))
                 .thenReturn(Collections.emptyList());
 
         // Выполнение
@@ -122,20 +123,23 @@ class ItemRequestServiceTest {
 
     @Test
     void getById_ShouldReturnRequestWithItems() {
-        // Подготовка
+
+        ItemRequest requestWithOneItem = new ItemRequest(2L, "Descr", user,
+                LocalDateTime.now(),
+                List.of(item));
+
         when(requestRepository.findById(anyLong()))
-                .thenReturn(Optional.of(request));
-        when(responseRepository.findItemsByRequestId(anyLong()))
-                .thenReturn(List.of(item));
+                .thenReturn(Optional.of(requestWithOneItem));
 
         // Выполнение
         ItemRequestExtDtoOut result = requestService.getById(1L);
 
         // Проверка
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getItems()).hasSize(1);
-        assertThat(result.getItems().iterator().next().getId()).isEqualTo(1L);
+        assertThat(result.getId()).isEqualTo(requestWithOneItem.getId());
+        assertThat(result.getItems()).hasSize(requestWithOneItem.getItems().size());
+        assertThat(result.getItems().iterator().next().getId())
+                .isEqualTo(requestWithOneItem.getItems().getFirst().getId());
     }
 
     @Test
@@ -155,8 +159,6 @@ class ItemRequestServiceTest {
         // Подготовка
         when(requestRepository.findById(anyLong()))
                 .thenReturn(Optional.of(request));
-        when(responseRepository.findItemsByRequestId(anyLong()))
-                .thenReturn(Collections.emptyList());
 
         // Выполнение
         ItemRequestExtDtoOut result = requestService.getById(1L);

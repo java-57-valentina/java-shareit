@@ -35,7 +35,7 @@ class BookingMapperTest {
     @Test
     void toResponseDto_ShouldMapRequiredFields() {
         User booker = new User(1L, "user", "user@email.com");
-        Item item = new Item(1L, "item", "desc", true, 2L);
+        Item item = new Item(1L, "item", "desc", true, 2L, null);
 
         Booking booking = new Booking();
         booking.setId(1L);
@@ -63,7 +63,7 @@ class BookingMapperTest {
     @Test
     void toTinyDto_ShouldMapBasicFields() {
         User booker = new User(1L, "user", "user@email.com");
-        Item item = new Item(1L, "item", "desc", true, 2L);
+        Item item = new Item(1L, "item", "desc", true, 2L, null);
 
         Booking booking = new Booking();
         booking.setId(1L);

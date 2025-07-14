@@ -44,7 +44,7 @@ class BookingServiceTest {
 
     private final LocalDateTime now = LocalDateTime.now();
     private final User user = new User(1L, "user", "user@email.com");
-    private final Item item = new Item(1L, "item", "description", true, 2L);
+    private final Item item = new Item(1L, "item", "description", true, 2L, null);
     private final Booking booking = Booking.builder()
             .id(1L)
             .start(now.plusDays(1))

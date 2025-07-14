@@ -39,7 +39,7 @@ class ItemControllerTest {
     @MockBean
     private ItemService itemService;
 
-    private final Item item = new Item(1L, "Hummer", "Description", true, 2L);
+    private final Item item = new Item(1L, "Hummer", "Description", true, 2L, null);
 
     @BeforeEach
     void setUp() {
