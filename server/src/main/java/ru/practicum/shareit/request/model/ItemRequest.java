@@ -2,7 +2,7 @@ package ru.practicum.shareit.request.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.practicum.shareit.responce.model.ItemResponse;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
@@ -33,7 +33,7 @@ public class ItemRequest {
     @Column(name = "created", nullable = false)
     private LocalDateTime createdAt;
 
-    // Добавляем связь с responses
-    @OneToMany(mappedBy = "request", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemResponse> responses = new ArrayList<>();
+    @OneToMany(mappedBy = "request", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Item> items = new ArrayList<>();
 }

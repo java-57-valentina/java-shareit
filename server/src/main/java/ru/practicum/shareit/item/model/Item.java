@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.practicum.shareit.request.model.ItemRequest;
 
 @Entity
 @Getter
@@ -27,4 +28,8 @@ public class Item {
 
     @Column(name = "user_id", nullable = false)
     private Long ownerId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    private ItemRequest request; // null, если вещь создана не в ответ на запрос
 }

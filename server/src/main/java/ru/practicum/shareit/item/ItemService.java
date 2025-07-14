@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item;
 
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,6 @@ import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
-import ru.practicum.shareit.responce.model.ItemResponse;
-import ru.practicum.shareit.responce.repository.ItemResponseRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -40,30 +37,28 @@ public class ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
-    private final ItemResponseRepository responseRepository;
     private final ItemRequestRepository requestRepository;
 
     @Transactional
-    public ItemDtoOut add(ItemDto itemDto, long userId) {
+    public ItemDtoOut add(ItemDto itemDto, Long userId) {
 
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User", userId));
 
+        ItemRequest request = null;
+        if (itemDto.getRequestId() != null) {
+            request = requestRepository.findById(itemDto.getRequestId())
+                    .orElseThrow(() -> new NotFoundException("Request", itemDto.getRequestId()));
+        }
+
         Item item = ItemMapper.toItem(itemDto);
         item.setOwnerId(userId);
+        item.setRequest(request);
         Item added = itemRepository.save(item);
 
         if (itemDto.getRequestId() != null) {
             log.info("RequestId: {}", itemDto.getRequestId());
 
-            ItemRequest request = requestRepository.findById(itemDto.getRequestId())
-                    .orElseThrow(() -> new NotFoundException("Request", userId));
-
-            ItemResponse response = new ItemResponse();
-            response.setItem(item);
-            response.setRequest(request);
-            ItemResponse saved = responseRepository.save(response);
-            log.info("ItemResponse saved: {}", saved);
         }
 
         return ItemMapper.toDto(added);
@@ -102,9 +97,9 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemDtoOut update(Long itemId, long ownerId, ItemDto itemDto) {
+    public ItemDtoOut update(Long itemId, Long ownerId, ItemDto itemDto) {
         Item item = ItemMapper.toItem(itemDto);
-        item.setOwnerId(ownerId); // ?
+        item.setOwnerId(ownerId);
         item.setId(itemId);
 
         userRepository.findById(ownerId)
@@ -127,7 +122,7 @@ public class ItemService {
         return ItemMapper.toDto(updated);
     }
 
-    public Collection<ItemDtoOut> getByOwner(long ownerId) {
+    public Collection<ItemDtoOut> getByOwner(Long ownerId) {
         return itemRepository.findByOwnerId(ownerId).stream()
                 .map(ItemMapper::toDto)
                 .toList();
@@ -146,7 +141,7 @@ public class ItemService {
     }
 
     @Transactional
-    public CommentDtoOut addComment(long userId, @Min(1) Long itemId, CommentDto commentDto) {
+    public CommentDtoOut addComment(Long userId, Long itemId, CommentDto commentDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User", userId));
 

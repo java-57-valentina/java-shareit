@@ -2,7 +2,6 @@ package ru.practicum.shareit.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -40,10 +39,6 @@ class UserControllerTest {
     private final User user = new User(1L, "username", "user@gmail.com");
 
 
-    @BeforeEach
-    void setUp() {
-    }
-
     @Test
     @SneakyThrows
     void add() {
@@ -61,30 +56,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.name", is(userDto.getName())))
                 .andExpect(jsonPath("$.email", is(userDto.getEmail())));
-    }
-
-    @Test
-    @SneakyThrows
-    void addUserWithInvalidEmail() {
-        UserDto invalidUser = new UserDto(null, "Valid Name", "@email");
-
-        mockMvc.perform(post("/users")
-                        .content(mapper.writeValueAsString(invalidUser))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("Invalid email format"));
-    }
-
-    @Test
-    @SneakyThrows
-    void addUserWithEmptyName() {
-        UserDto invalidUser = new UserDto(null, " ", "valid@email");
-
-        mockMvc.perform(post("/users")
-                        .content(mapper.writeValueAsString(invalidUser))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("Name can not be empty"));
     }
 
     @Test

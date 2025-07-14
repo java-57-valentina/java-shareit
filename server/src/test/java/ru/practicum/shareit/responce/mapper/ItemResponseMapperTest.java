@@ -3,7 +3,6 @@ package ru.practicum.shareit.responce.mapper;
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.item.dto.TinyItemDtoOut;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.responce.model.ItemResponse;
 import ru.practicum.shareit.user.User;
 
 import static org.assertj.core.api.Assertions.assertThat;

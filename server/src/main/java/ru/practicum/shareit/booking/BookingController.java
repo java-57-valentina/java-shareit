@@ -1,9 +1,6 @@
 package ru.practicum.shareit.booking;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDtoOut;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -13,7 +10,6 @@ import java.util.Collection;
 
 import static ru.practicum.shareit.item.ItemController.X_SHARER_USER_ID;
 
-@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/bookings")
@@ -24,7 +20,7 @@ public class BookingController {
     @GetMapping("/{bookingId}")
     public BookingDtoOut getById(
             @RequestHeader(value = X_SHARER_USER_ID) Long userId,
-            @PathVariable @Min(1) Long bookingId) {
+            @PathVariable Long bookingId) {
         return bookingService.findById(bookingId, userId);
     }
 
@@ -45,14 +41,14 @@ public class BookingController {
     @PostMapping
     public BookingDtoOut add(
             @RequestHeader(value = X_SHARER_USER_ID) Long userId,
-            @Valid @RequestBody BookingDto bookingDto) {
+            @RequestBody BookingDto bookingDto) {
         return bookingService.add(userId, bookingDto);
     }
 
     @PatchMapping("/{bookingId}")
     public BookingDtoOut update(
             @RequestHeader(value = X_SHARER_USER_ID) Long userId,
-            @PathVariable @Min(1) Long bookingId,
+            @PathVariable Long bookingId,
             @RequestParam(name = "approved") boolean approved) {
         return bookingService.update(userId, bookingId, approved);
     }

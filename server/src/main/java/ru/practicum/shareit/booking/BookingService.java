@@ -32,7 +32,7 @@ public class BookingService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
-    public BookingDtoOut findById(Long id, long userId) {
+    public BookingDtoOut findById(Long id, Long userId) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Booking", id));
 
@@ -40,7 +40,7 @@ public class BookingService {
         Item item = booking.getItem();
         Long ownerId = item.getOwnerId();
 
-        if (userId != ownerId && userId != bookerId)
+        if (!userId.equals(ownerId) && !userId.equals(bookerId))
             throw new ValidateException("Wrong userId");
 
         return BookingMapper.toResponseDto(booking);

@@ -1,20 +1,16 @@
 package ru.practicum.shareit.request;
 
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoOut;
 import ru.practicum.shareit.request.dto.ItemRequestExtDtoOut;
 import ru.practicum.shareit.request.mapper.RequestMapper;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
-import ru.practicum.shareit.responce.repository.ItemResponseRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -28,7 +24,6 @@ public class ItemRequestService {
 
      private final UserRepository userRepository;
      private final ItemRequestRepository requestRepository;
-     private final ItemResponseRepository responseRepository;
 
     public ItemRequestDtoOut add(Long userId, ItemRequestDto requestDto) {
         log.info("try to add request: '{}' from user id:{}", requestDto.getDescription(), userId);
@@ -47,7 +42,7 @@ public class ItemRequestService {
     }
 
     public Collection<ItemRequestExtDtoOut> getByRequester(Long requesterId) {
-        Collection<ItemRequest> list = requestRepository.findAllByRequesterId(requesterId);
+        Collection<ItemRequest> list = requestRepository.findAllByRequesterIdOrderByCreatedAtDesc(requesterId);
         return list.stream().map(RequestMapper::toResponseExtDto).toList();
     }
 
@@ -57,12 +52,12 @@ public class ItemRequestService {
                 .toList();
     }
 
-    public ItemRequestExtDtoOut getById(@Min(1) Long id) {
+    public ItemRequestExtDtoOut getById(Long id) {
         ItemRequest request = requestRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Item request", id));
         ItemRequestExtDtoOut responseExtDto = RequestMapper.toResponseExtDto(request);
-        Collection<Item> items = responseRepository.findItemsByRequestId(request.getId());
-        responseExtDto.setItems(items.stream().map(ItemMapper::toTinyDto).toList());
+        // Collection<Item> items = responseRepository.findItemsByRequestId(request.getId());
+        // responseExtDto.setItems(items.stream().map(ItemMapper::toTinyDto).toList());
         return responseExtDto;
     }
 }

@@ -11,11 +11,9 @@ import java.time.LocalDateTime;
 public class TinyBookingDtoOut {
 
     private Long id;
-
     private Long bookerId;
     private Long itemId;
     private Status status;
-
     private LocalDateTime start;
     private LocalDateTime end;
 }

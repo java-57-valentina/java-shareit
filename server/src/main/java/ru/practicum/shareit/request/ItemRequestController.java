@@ -1,8 +1,6 @@
 package ru.practicum.shareit.request;
 
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoOut;
@@ -12,7 +10,6 @@ import java.util.Collection;
 
 import static ru.practicum.shareit.item.ItemController.X_SHARER_USER_ID;
 
-@Validated
 @RestController
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor
@@ -32,7 +29,7 @@ public class ItemRequestController {
 
     @GetMapping("/{id}")
     public ItemRequestExtDtoOut getById(
-            @PathVariable @Min(1) Long id) {
+            @PathVariable Long id) {
         return requestService.getById(id);
     }
 

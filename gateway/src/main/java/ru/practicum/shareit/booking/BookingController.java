@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -12,7 +13,7 @@ import ru.practicum.shareit.booking.dto.State;
 import static ru.practicum.shareit.Constants.X_SHARER_USER_ID;
 
 @Validated
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping(path = "/bookings")
 public class BookingController {

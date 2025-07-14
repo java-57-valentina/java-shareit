@@ -1,10 +1,10 @@
 package ru.practicum.shareit.request.mapper;
 
 import lombok.experimental.UtilityClass;
+import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.request.dto.ItemRequestExtDtoOut;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.dto.ItemRequestDtoOut;
-import ru.practicum.shareit.responce.mapper.ItemResponseMapper;
 
 @UtilityClass
 public class RequestMapper {
@@ -23,7 +23,7 @@ public class RequestMapper {
         out.setUserId(request.getRequester().getId());
         out.setCreatedAt(request.getCreatedAt());
         out.setDescription(request.getDescription());
-        out.setItems(request.getResponses().stream().map(ItemResponseMapper::mapToTinyItemDtoOut).toList());
+        out.setItems(request.getItems().stream().map(ItemMapper::toTinyDto).toList());
         return out;
     }
 }

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.*;
@@ -12,7 +13,7 @@ import ru.practicum.shareit.validation.Create;
 import ru.practicum.shareit.validation.Update;
 
 @Validated
-@RestController
+@Controller
 @RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
@@ -22,7 +23,7 @@ public class ItemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> add(@RequestHeader(X_SHARER_USER_ID) long userId,
+    public ResponseEntity<Object> add(@RequestHeader(X_SHARER_USER_ID) Long userId,
                                       @Validated({Create.class}) @RequestBody ItemDto itemDto) {
         return itemClient.add(itemDto, userId);
     }
