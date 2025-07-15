@@ -1,0 +1,1 @@
+docker run -d -p 5432:5432 -v postgres:/var/lib/postgres -e POSTGRES_PASSWORD=shareit -e POSTGRES_USER=shareit -e POSTGRES_DB=shareit postgres
